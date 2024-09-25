@@ -42,19 +42,25 @@ export default function MovieSearch() {
             `http://www.omdbapi.com/?t=${searchTerm}&apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}`
           );
           
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+     
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          if (data.Response === "False") {
+              throw new Error(data.Error);
+          }
+          setMovieDetails(data);
+      } catch (error) {
+          // Specify a more specific type
+          if (error instanceof Error) {
+              setError(error.message);
+          } else {
+              setError("An unknown error occurred");
+          }
+      } finally {
+          setLoading(false);
       }
-      const data = await response.json();
-      if (data.Response === "False") {
-        throw new Error(data.Error);
-      }
-      setMovieDetails(data); // Set movie details state with the fetched data
-    } catch (error: any) {
-      setError(error.message); // Set error state with the error message
-    } finally {
-      setLoading(false); // Set loading to false after fetching data
-    }
   };
 
   // Function to handle changes in the search input field
