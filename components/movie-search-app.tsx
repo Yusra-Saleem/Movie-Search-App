@@ -43,24 +43,19 @@ export default function MovieSearch() {
           );
           
      
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          if (data.Response === "False") {
-              throw new Error(data.Error);
-          }
-          setMovieDetails(data);
-      } catch (error) {
-          // Specify a more specific type
-          if (error instanceof Error) {
-              setError(error.message);
-          } else {
-              setError("An unknown error occurred");
-          }
-      } finally {
-          setLoading(false);
+         if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
+      const data = await response.json();
+      if (data.Response === "False") {
+        throw new Error(data.Error);
+      }
+      setMovieDetails(data); // Set movie details state with the fetched data
+    } catch (error) {
+      setError(error.message); // Set error state with the error message
+    } finally {
+      setLoading(false); // Set loading to false after fetching data
+    }
   };
 
   // Function to handle changes in the search input field
